@@ -1,5 +1,13 @@
 package ba.unsa.rpr.tutorijal7;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
@@ -35,6 +43,39 @@ public class Tutorijal {
                 }
                 ulaz.close();
                 return gradovi;
+    }
+
+    static UN ucitajXml(ArrayList<Grad> gradovi){
+        UN claniceUN = new UN();
+        Document xmldoc = null;
+        try {
+            DocumentBuilder docReader
+                    = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+            xmldoc = docReader.parse(new File("proba.xml"));
+        } catch (Exception e) {
+            System.out.println("drzave.xml nije validan XML dokument");
+            return null;
+        }
+        NodeList djeca = xmldoc.getChildNodes();
+        for(int i = 0; i < djeca.getLength(); i++) {
+            Node dijete = djeca.item(i);
+
+            if (dijete instanceof Element) {
+                Element e = (Element) dijete;
+                NodeList djecaDrzave = e.getChildNodes();
+                for(int j = 0; i < djecaDrzave.getLength(); i++) {
+                    Node dijeteDrzave = djecaDrzave.item(i);
+                    if(dijeteDrzave instanceof Element){
+                        if(((Element)dijeteDrzave).getTagName() =="naziv")
+                         dijeteDrzave.getTextContent();
+                    }
+                }
+
+            }
+        }
+
+
+        return claniceUN;
     }
 
     public static void main(String[] args) {
